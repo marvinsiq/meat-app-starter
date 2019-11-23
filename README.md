@@ -160,16 +160,16 @@ Todas as imagens usadas na aplicação são pertencentes a freepik.com
 ### 2 Rotas
 
 * Como criar rotas
- * property binding "routerLink"
- * directiva routerLinkActive
+  * property binding "routerLink"
+  * directiva routerLinkActive
 
 #### Passos
 
 * Criar o componente About
- * `ng g c about --spec=false`
+  * `ng g c about --spec=false`
 
 * Criar o arquivo de rotas 
- * `app.roputes.ts`
+  * `app.roputes.ts`
 
 * Importar o arquivo de rotas dentro do app.module.ts. `RouterModule.forRoot(ROUTES)`
 
@@ -275,3 +275,46 @@ export interface Restaurant {
   * `json-server db.json`
 
 * Testar o serviço acesando a url <http://localhost:3000/restaurants>
+
+### 6 Adicionando HTTP ao Serviço de Restaurantes
+
+* Serviço Http
+* Decorator @Injectable
+* Observable
+* Map
+* Subscribe
+
+#### Passos
+
+* Criar a constante "MEAT_API" com o endereço do serviço
+  * Criar o arquivo src/app/app.api.ts com o conteúdo:
+  `export const MEAT_API = 'http://localhost:3000'`
+
+* Alterar no RestaurantsService:
+  * Remover a inicialização do array `restaurants` com os dados dummy (estes serão carregados da api de backend agora)
+  * Importar a constante MEAT_API do arquivo app.api.ts
+    * `import { MEAT_API } from "../app.api"`
+  * Anotar a classe com o decorator @Injectable
+  * Incluir no construtor a propriedade privada http para o serviço http do angular
+  * Alterar o retorno do método `restaurants` para utilizar o serviço http apontando para a api de restaurantes
+    * <pre>return this.http.get(`${MEAT_API}/restaurants`)</pre>
+  * Alterar o tipo de retorno do método para `Observable<Restaurant[]>`
+  * Importar o operador map `import 'rxjs/add/operator/map'`
+  * Mapear o retorno da resposta http pois ela retorna `Obsevable<Response>`
+    * <pre>
+        restaurants(): Observable<Restaurant[]> {
+        return this.http.get(`${MEAT_API}/restaurants`)
+            .map(response => response.json());
+    }
+    </pre>
+
+* Alterar no componente RestaurantsComponent
+  * No método ngOnInit remover a atribuição da propriedade `restaurants` substituindo pela chamada do serviço
+  <pre>
+    ngOnInit() {
+    this.restaurantsService.restaurants().subscribe(      
+      restaurants => this.restaurants = restaurants
+    )
+  }
+  </pre>
+
