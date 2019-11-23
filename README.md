@@ -146,7 +146,21 @@ Dependências dos pacotes que devem ficar em package.json:
 
 Todas as imagens usadas na aplicação são pertencentes a freepik.com
 
-## Criação dos componentes
+## Roteiro - Resumo
 
-`ng g c header --spec=false`
-`ng g c home --spec=false`
+### 1 Criação dos componentes Header e Home
+
+* `ng g c header --spec=false`
+* `ng g c home --spec=false`
+
+### 2 Rotas
+
+* Criar o componente About
+* * `ng g c about --spec=false`
+* Criar o arquivo de rotas 
+* * `app.roputes.ts`
+* Importar o arquivo de rotas dentro do app.module.ts. `RouterModule.forRoot(ROUTES)`
+* Adicionar a tag `<router-outlet></router-outlet>` no template principal "app.component.html" substituindo `<mt-home></mt-home>`
+* Criar o link "Sobre" (apontando para a página about) no header utilizando property binding. Adicionar dentro da tag a `[routerLink]="['/about']"`
+* Criar o link "Meat" (apontando para a página principal) no header utilizando property binding.  Adicionar dentro da tag a `[routerLink]="['/']"`
+* Utilizar a directiva routerLinkActive no elemento que possui o link (ou elementos parents) para corrigir o efeito visual dos links ativos.
