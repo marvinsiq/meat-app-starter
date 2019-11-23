@@ -146,21 +146,99 @@ Dependências dos pacotes que devem ficar em package.json:
 
 Todas as imagens usadas na aplicação são pertencentes a freepik.com
 
-## Roteiro - Resumo
+## Roteiro
 
 ### 1 Criação dos componentes Header e Home
+
+* Como criar componentes
+
+#### Passos
 
 * `ng g c header --spec=false`
 * `ng g c home --spec=false`
 
 ### 2 Rotas
 
+* Como criar rotas
+* * property binding "routerLink"
+* * directiva routerLinkActive
+
+#### Passos
+
 * Criar o componente About
 * * `ng g c about --spec=false`
+
 * Criar o arquivo de rotas 
 * * `app.roputes.ts`
+
 * Importar o arquivo de rotas dentro do app.module.ts. `RouterModule.forRoot(ROUTES)`
+
 * Adicionar a tag `<router-outlet></router-outlet>` no template principal "app.component.html" substituindo `<mt-home></mt-home>`
+
 * Criar o link "Sobre" (apontando para a página about) no header utilizando property binding. Adicionar dentro da tag a `[routerLink]="['/about']"`
 * Criar o link "Meat" (apontando para a página principal) no header utilizando property binding.  Adicionar dentro da tag a `[routerLink]="['/']"`
 * Utilizar a directiva routerLinkActive no elemento que possui o link (ou elementos parents) para corrigir o efeito visual dos links ativos.
+
+### 3 Criando os Componentes de Restaurantes
+
+* Decorator @Input
+* Interface
+* *ngFor
+
+#### Passos
+
+* Criar o componente Restaurants
+* * `ng g c restaurants --spec=false`
+
+* Criar uma nova rota para restaurants
+
+* Corrigir os links que levam à página de restaurants com `[routerLink]="['/restaurants']"`
+* * home.components.html
+* * header.component.html
+
+* Criar o componente individual que representa um restaurant
+* * `ng g c restaurants/restaurant --spec=false`
+
+* Criar a interface Restaurant (modelo) que representa os dados de um restaurante
+<pre>
+export interface Restaurant {
+    id: string
+    name: string
+    category: string
+    rating: number
+    imagePath: string
+    deliveryEstimate: string
+}
+</pre>
+
+* Criar a propriedade restaurant do tipo da interface Restaurant dentro de RestaurantComponent com o decorator @Input
+
+* Substituir no template restaurant.component.html os dados fixos pelas propriedades que foram criadas na interface
+
+* Adicionar na classe RestaurantsComponent um array de restaurants com dados dummy. Copiar alguns dados do db.json
+<pre>
+  restaurants: Restaurant[]  = [
+      {
+        id: "bread-bakery",
+        name: "Bread & Bakery",
+        category: "Bakery",
+        deliveryEstimate: "25m",
+        rating: 4.9,
+        imagePath: "assets/img/restaurants/breadbakery.png"
+      },
+      {
+        id: "burger-house",
+        name: "Burger House",
+        category: "Hamburgers",
+        deliveryEstimate: "100m",
+        rating: 3.5,
+        imagePath: "assets/img/restaurants/burgerhouse.png"
+      }]
+</pre>
+
+* Alterar o template restaurants.component.html para utilizar o *ngFor para iterar sobre o array e incluir o template individual restaurant.component.html passando o objeto restaurant através de property binding. 
+<pre>
+          &lt;div *ngFor=&quot;let restaurant of restaurants&quot; class=&quot;col-sm-6 col-xs-12&quot;&gt;                        
+            &lt;mt-restaurant [restaurant]=&quot;restaurant&quot; &gt;&lt;/mt-restaurant&gt;
+          &lt;/div&gt;
+</pre>
