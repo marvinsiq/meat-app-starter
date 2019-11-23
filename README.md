@@ -160,16 +160,16 @@ Todas as imagens usadas na aplicação são pertencentes a freepik.com
 ### 2 Rotas
 
 * Como criar rotas
-* * property binding "routerLink"
-* * directiva routerLinkActive
+ * property binding "routerLink"
+ * directiva routerLinkActive
 
 #### Passos
 
 * Criar o componente About
-* * `ng g c about --spec=false`
+ * `ng g c about --spec=false`
 
 * Criar o arquivo de rotas 
-* * `app.roputes.ts`
+ * `app.roputes.ts`
 
 * Importar o arquivo de rotas dentro do app.module.ts. `RouterModule.forRoot(ROUTES)`
 
@@ -188,18 +188,18 @@ Todas as imagens usadas na aplicação são pertencentes a freepik.com
 #### Passos
 
 * Criar o componente Restaurants
-* * `ng g c restaurants --spec=false`
+ * `ng g c restaurants --spec=false`
 
 * Criar uma nova rota para restaurants
 
 * Corrigir os links que levam à página de restaurants com `[routerLink]="['/restaurants']"`
-* * home.components.html
-* * header.component.html
+ * home.components.html
+ * header.component.html
 
 * Criar o componente individual que representa um restaurant
-* * `ng g c restaurants/restaurant --spec=false`
+ * `ng g c restaurants/restaurant --spec=false`
 
-* Criar a interface Restaurant (modelo) que representa os dados de um restaurante
+* Criar a interface Restaurant (app/restaurants/restaurant.model.ts) que representa os dados de um restaurante
 <pre>
 export interface Restaurant {
     id: string
@@ -238,7 +238,28 @@ export interface Restaurant {
 
 * Alterar o template restaurants.component.html para utilizar o *ngFor para iterar sobre o array e incluir o template individual restaurant.component.html passando o objeto restaurant através de property binding. 
 <pre>
-          &lt;div *ngFor=&quot;let restaurant of restaurants&quot; class=&quot;col-sm-6 col-xs-12&quot;&gt;                        
-            &lt;mt-restaurant [restaurant]=&quot;restaurant&quot; &gt;&lt;/mt-restaurant&gt;
-          &lt;/div&gt;
+  &lt;div *ngFor=&quot;let restaurant of restaurants&quot; class=&quot;col-sm-6 col-xs-12&quot;&gt;                        
+    &lt;mt-restaurant [restaurant]=&quot;restaurant&quot; &gt;&lt;/mt-restaurant&gt;
+  &lt;/div&gt;
 </pre>
+
+### Criando a Classe de Serviço para Restaurantes
+
+* Serviços
+* Injeção de dependências
+* Método de ciclo de vida OnInit
+* Provider
+
+#### Passos
+
+* Criar a classe de serviço RestaurantsService (app/restaurants/restaurants.service.ts)
+* Mover a propriedade restaurants de RestaurantsComponent para dentro de RestaurantsService renomeando para rests (para evitar conflito de nomes)
+* Criar o método restaurants() retornando o array de restaurantes "rests"
+* Injetar a classe de serviço dentro do componente
+* Inicializar a propriedade restaurants com a chamada do método restaurants() do serviço. Fazer a inicialização no método ngOnInit
+<pre>
+  ngOnInit() {
+    this.restaurants = this.restaurantsService.restaurants()
+  }
+<pre>
+* Adicionar o provide RestaurantsService no app.module.ts
