@@ -188,16 +188,16 @@ Todas as imagens usadas na aplicação são pertencentes a freepik.com
 #### Passos
 
 * Criar o componente Restaurants
- * `ng g c restaurants --spec=false`
+  * `ng g c restaurants --spec=false`
 
 * Criar uma nova rota para restaurants
 
 * Corrigir os links que levam à página de restaurants com `[routerLink]="['/restaurants']"`
- * home.components.html
- * header.component.html
+  * home.components.html
+  * header.component.html
 
 * Criar o componente individual que representa um restaurant
- * `ng g c restaurants/restaurant --spec=false`
+  * `ng g c restaurants/restaurant --spec=false`
 
 * Criar a interface Restaurant (app/restaurants/restaurant.model.ts) que representa os dados de um restaurante
 <pre>
@@ -243,7 +243,7 @@ export interface Restaurant {
   &lt;/div&gt;
 </pre>
 
-### Criando a Classe de Serviço para Restaurantes
+### 4 Criando a Classe de Serviço para Restaurantes
 
 * Serviços
 * Injeção de dependências
@@ -261,5 +261,17 @@ export interface Restaurant {
   ngOnInit() {
     this.restaurants = this.restaurantsService.restaurants()
   }
-<pre>
+</pre>
 * Adicionar o provide RestaurantsService no app.module.ts
+
+### 5 Configurando a API de Backend (json-server)
+
+#### Passos
+
+* Instalar o json-server ()
+  * `nmp install -g json-server`
+
+* Iniciar o processo
+  * `json-server db.json`
+
+* Testar o serviço acesando a url <http://localhost:3000/restaurants>
