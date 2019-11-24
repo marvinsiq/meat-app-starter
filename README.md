@@ -148,7 +148,7 @@ Todas as imagens usadas na aplicação são pertencentes a freepik.com
 
 ## Roteiro
 
-### 1 Criação dos componentes Header e Home
+### 1 - Criação dos componentes Header e Home
 
 * Como criar componentes
 
@@ -157,7 +157,7 @@ Todas as imagens usadas na aplicação são pertencentes a freepik.com
 * `ng g c header --spec=false`
 * `ng g c home --spec=false`
 
-### 2 Rotas
+### 2 - Rotas
 
 * Como criar rotas
   * property binding "routerLink"
@@ -169,7 +169,7 @@ Todas as imagens usadas na aplicação são pertencentes a freepik.com
   * `ng g c about --spec=false`
 
 * Criar o arquivo de rotas 
-  * `app.roputes.ts`
+  * `app.routes.ts`
 
 * Importar o arquivo de rotas dentro do app.module.ts. `RouterModule.forRoot(ROUTES)`
 
@@ -179,7 +179,7 @@ Todas as imagens usadas na aplicação são pertencentes a freepik.com
 * Criar o link "Meat" (apontando para a página principal) no header utilizando property binding.  Adicionar dentro da tag a `[routerLink]="['/']"`
 * Utilizar a directiva routerLinkActive no elemento que possui o link (ou elementos parents) para corrigir o efeito visual dos links ativos.
 
-### 3 Criando os Componentes de Restaurantes
+### 3 - Criando os Componentes de Restaurantes
 
 * Decorator @Input
 * Interface
@@ -243,7 +243,7 @@ export interface Restaurant {
   &lt;/div&gt;
 </pre>
 
-### 4 Criando a Classe de Serviço para Restaurantes
+### 4 - Criando a Classe de Serviço para Restaurantes
 
 * Serviços
 * Injeção de dependências
@@ -264,7 +264,7 @@ export interface Restaurant {
 </pre>
 * Adicionar o provide RestaurantsService no app.module.ts
 
-### 5 Configurando a API de Backend (json-server)
+### 5 - Configurando a API de Backend (json-server)
 
 #### Passos
 
@@ -276,7 +276,7 @@ export interface Restaurant {
 
 * Testar o serviço acesando a url <http://localhost:3000/restaurants>
 
-### 6 Adicionando HTTP ao Serviço de Restaurantes
+### 6 - Adicionando HTTP ao Serviço de Restaurantes
 
 * Serviço Http
 * Decorator @Injectable
@@ -318,7 +318,7 @@ export interface Restaurant {
   }
   </pre>
 
-### 7 Tratamento de Erros com o Operador Catch
+### 7 - Tratamento de Erros com o Operador Catch
 
 * ErrorHandler
 * Operador catch
@@ -364,3 +364,28 @@ export class ErrorHandler {
 
 * Testar o tratamento de erro alterando a url do serviço e navegando pela página de restaurantes.
   * Verificar o console do browser 
+
+
+### 8 - Criando Componentes de Detalhe de Restaurante
+
+* Rotas parametrizadas
+
+#### Passos
+
+* Criar o componente de detalhes do restaurante
+  * `ng g c restaurant-detail --spec=false`
+
+* Criar o componente de menu do restaurante
+  * `ng g c restaurant-detail/menu --spec=false`
+
+* Criar o componente de carrinho do restaurante
+  * `ng g c restaurant-detail/shopping-cart --spec=false`
+
+* Criar o componente de item de menu do restaurante
+  * `ng g c restaurant-detail/menu-item --spec=false`
+
+* Criar uma rota para o detalhe do restaurante
+  * <pre>{ path: 'restaurants/:id', component: RestaurantDetailComponent }</pre>
+
+* Criar um link em `restaurant.component.html` apontando para o detalhe do restaurante
+  * `[routerLink]="['/restaurants', restaurant.id]"`
