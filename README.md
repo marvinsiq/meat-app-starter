@@ -281,7 +281,7 @@ export interface Restaurant {
 * Serviço Http
 * Decorator @Injectable
 * Observable
-* Map
+* Operador Map
 * Subscribe
 
 #### Passos
@@ -302,7 +302,7 @@ export interface Restaurant {
   * Importar o operador map `import 'rxjs/add/operator/map'`
   * Mapear o retorno da resposta http pois ela retorna `Obsevable<Response>`
     * <pre>
-        restaurants(): Observable<Restaurant[]> {
+    restaurants(): Observable<Restaurant[]> {
         return this.http.get(`${MEAT_API}/restaurants`)
             .map(response => response.json());
     }
@@ -311,10 +311,56 @@ export interface Restaurant {
 * Alterar no componente RestaurantsComponent
   * No método ngOnInit remover a atribuição da propriedade `restaurants` substituindo pela chamada do serviço
   <pre>
-    ngOnInit() {
+  ngOnInit() {
     this.restaurantsService.restaurants().subscribe(      
       restaurants => this.restaurants = restaurants
     )
   }
   </pre>
 
+### 7 Tratamento de Erros com o Operador Catch
+
+* ErrorHandler
+* Operador catch
+
+#### Passos
+
+* Criar a classe ErrorHandler (app/app.error-handler.ts)
+* Implementar o método estático handlerError fazendo o tratamento dos erros
+<pre>
+import { Response } from '@angular/http'
+import { Observable } from 'rxjs/Observable'
+
+export class ErrorHandler {
+    static handlerError(error: Response | any) {
+        let errorMessage: string
+
+        if (error instanceof Response) {
+            errorMessage = `Erro ${error.status} ao obter a URL ${error.url} - ${error.statusText}`
+        } else {
+            errorMessage = error.toString()
+        }
+
+        console.log(errorMessage)
+        return Observable.throw(errorMessage)
+    }
+}
+</pre>
+
+* Importar a classe ErrorHandler na classe de serviço RestaurantsService
+  * `import { ErrorHandler } from "../app.error-handler"`
+
+* Importar o operador catch
+  * `import 'rxjs/add/operator/catch';`
+
+* Acionar o operador catch chamando o método estático ErrorHandler.handlerError logo após o map
+  * <pre>
+    restaurants(): Observable<Restaurant[]> {
+        return this.http.get(`${MEAT_API}/restaurants`)
+            .map(response => response.json())
+            .catch(ErrorHandler.handlerError)
+    }
+    </pre>
+
+* Testar o tratamento de erro alterando a url do serviço e navegando pela página de restaurantes.
+  * Verificar o console do browser 
