@@ -413,12 +413,11 @@ export class ErrorHandler {
 * Criar uma propriedade `restaurant` do tipo `Restaurant`
 
 * Implementar no método `ngOnInit` a chamada do método `restaurantById` do RestaurantsService para inicilizar a propriedade `restaurant` (utilizar activate router para pegar o id)
-  * <pre>
-ngOnInit() {
+  * ```
+  ngOnInit() {
     this.restaurantsService.restaurantById(this.route.snapshot.params['id'])
       .subscribe(restaurant => this.restaurant = restaurant)
-  }
-  </pre>  
+  }```
 
 * Substituir as expressões do template `restaurant-detail.component.html` pela propriedade `restaurant` utilizando o "?" para não dar erro enquanto a propriedade ainda não for carregada.
   * Exemplo `{{restaurant?.name}}`
@@ -426,3 +425,33 @@ ngOnInit() {
 * Utilizar ngIf no div da imagem para evitar erro de 404. 
   * `*ngIf="restaurant"`
 
+### 10 - Rotas Filhas para Avaliações e Menu
+
+* Children routes
+* redirectTo
+* pathMatch
+
+#### Passos
+
+* Criar o componente Reviews
+  * `ng g c restaurant-detail/reviews --spec=false`
+
+* Criar rotas filhas para menu e reviews
+  * ```
+    {
+        path: 'restaurants/:id', component: RestaurantDetailComponent,
+        children: [
+            { path: '', redirectTo: 'menu', pathMatch: 'full' },
+            { path: 'menu', component: MenuComponent },
+            { path: 'reviews', component: ReviewsComponent }
+        ]
+    }```
+
+* Alterar o template de detalhes do restaurante `restaurant-detail.component.html` substituindo `<mt-menu></mt-menu>` por `<router-outlet></router-outlet>`
+
+* Corrigir os links de Menu a Avaliações utilizando routerLink
+  * `[routerLink]="['menu']"`
+  * `[routerLink]="['reviews']"`
+
+* Utilizar routerLinkActive para corrigir o efeito visual do link ativo
+  * `routerLinkActive="detail-active"`
