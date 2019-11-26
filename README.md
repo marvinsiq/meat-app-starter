@@ -389,3 +389,40 @@ export class ErrorHandler {
 
 * Criar um link em `restaurant.component.html` apontando para o detalhe do restaurante
   * `[routerLink]="['/restaurants', restaurant.id]"`
+
+### 9 - Serviço HTTP para o Detalhe do Restaurante
+
+* Activate Router
+  * snapshot
+  * subscribe
+* directiva ngIf
+
+#### Passos
+
+* Criar um novo método em RestaurantsService que retorna apenas 1 restaurante pelo id
+  * <pre>
+      restaurantById(id: string): Observable<Restaurant> {
+        return this.http.get(`${MEAT_API}/restaurants/${id}`)
+            .map(response => response.json())
+            .catch(ErrorHandler.handlerError)
+    }</pre>
+  
+* Injetar RestaurantsService e ActivateRoute em RestaurantDetailComponent (propriedades privadas no construtor)
+  * `constructor(private restaurantsService: RestaurantsService, private route: ActivatedRoute) { }`
+
+* Criar uma propriedade `restaurant` do tipo `Restaurant`
+
+* Implementar no método `ngOnInit` a chamada do método `restaurantById` do RestaurantsService para inicilizar a propriedade `restaurant` (utilizar activate router para pegar o id)
+  * <pre>
+ngOnInit() {
+    this.restaurantsService.restaurantById(this.route.snapshot.params['id'])
+      .subscribe(restaurant => this.restaurant = restaurant)
+  }
+  </pre>  
+
+* Substituir as expressões do template `restaurant-detail.component.html` pela propriedade `restaurant` utilizando o "?" para não dar erro enquanto a propriedade ainda não for carregada.
+  * Exemplo `{{restaurant?.name}}`
+
+* Utilizar ngIf no div da imagem para evitar erro de 404. 
+  * `*ngIf="restaurant"`
+
