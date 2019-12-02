@@ -24,124 +24,6 @@
 
 `json-server db.json`
 
-## Goodies
-
-Expressões regulares usadas na validação de formulários
-
-### Email Regex
-
-`/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i`
-
-### Number Regex
-
-`/^[0-9]*$/`
-
-## Upgrade para Angular 4.3
-
-Dependências dos pacotes que devem ficar em package.json:
-
-```
-"dependencies": {
-    "@angular/animations": "4.3.3",
-    "@angular/common": "4.3.3",
-    "@angular/compiler": "4.3.3",
-    "@angular/core": "4.3.3",
-    "@angular/forms": "4.3.3",
-    "@angular/platform-browser": "4.3.3",
-    "@angular/platform-browser-dynamic": "4.3.3",
-    "@angular/router": "4.3.3",
-    "admin-lte": "2.3.11",
-    "core-js": "2.4.1",
-    "font-awesome": "4.7.0",
-    "intl": "1.2.5",
-    "jquery": "3.1.1",
-    "reflect-metadata": "0.1.10",
-    "rxjs": "5.4.2",
-    "ts-helpers": "1.1.2",
-    "web-animations-js": "2.2.5",
-    "zone.js": "0.8.16"
-  },
-  "devDependencies": {
-    "@angular/cli": "1.2.7",
-    "@angular/compiler-cli": "4.3.3",
-    "@types/jasmine": "2.5.53",
-    "@types/express": "4.0.37",
-    "@types/jsonwebtoken": "7.2.3",
-    "@types/node": "7.0.5",
-    "codelyzer": "3.1.2",
-    "jasmine-core": "2.7.0",
-    "jasmine-spec-reporter": "4.1.1",
-    "json-server": "0.12.0",
-    "jsonwebtoken": "7.4.1",
-    "karma": "1.7.0",
-    "karma-chrome-launcher": "2.2.0",
-    "karma-cli": "1.0.1",
-    "karma-jasmine": "1.1.0",
-    "karma-remap-istanbul": "0.6.0",
-    "protractor": "5.1.2",
-    "ts-node": "3.3.0",
-    "tslint": "5.5.0",
-    "typescript": "2.4.2",
-    "webdriver-manager": "12.0.6"
-  }
-```
-
-## Upgrade para Angular 6 (Apenas para a aulas finais)
-
-Dependências dos pacotes que devem ficar em package.json:
-
-```
-"dependencies": {
-    "@angular/animations": "6.0.0",
-    "@angular/common": "6.0.0",
-    "@angular/compiler": "6.0.0",
-    "@angular/core": "6.0.0",
-    "@angular/forms": "6.0.0",
-    "@angular/platform-browser": "6.0.0",
-    "@angular/platform-browser-dynamic": "6.0.0",
-    "@angular/platform-server": "6.0.0",
-    "@angular/router": "6.0.0",
-    "admin-lte": "2.3.11",
-    "core-js": "2.5.4",
-    "font-awesome": "4.7.0",
-    "intl": "1.2.5",
-    "jquery": "3.1.1",
-    "reflect-metadata": "0.1.10",
-    "rxjs": "6.0.0",
-    "rxjs-compat": "6.0.0",
-    "ts-helpers": "1.1.2",
-    "web-animations-js": "2.2.5",
-    "zone.js": "0.8.26",
-    "ajv": "6.0.0"
-  },
-  "devDependencies": {
-    "@angular-devkit/build-angular": "0.6.0",
-    "@angular/compiler-cli": "6.0.0",
-    "@angular/cli": "6.0.0",
-    "@angular/language-service": "6.0.0",
-    "@types/jasmine": "2.8.6",
-    "@types/jasminewd2": "2.0.3",
-    "@types/node": "8.9.4",
-    "@types/express": "4.0.37",
-    "@types/jsonwebtoken": "7.2.3",
-    "codelyzer": "4.2.1",
-    "jasmine-core": "2.99.1",
-    "jasmine-spec-reporter": "4.2.1",
-    "karma": "1.7.1",
-    "karma-chrome-launcher": "2.2.0",
-    "karma-coverage-istanbul-reporter": "1.4.2",
-    "karma-jasmine": "1.1.1",
-    "karma-jasmine-html-reporter": "0.2.2",
-    "protractor": "5.3.0",
-    "ts-node": "5.0.1",
-    "tslint": "5.9.1",
-    "json-server": "0.12.0",
-    "jsonwebtoken": "7.4.1",
-    "typescript": "2.7.2",
-    "webdriver-manager": "12.0.6"
-  }
-```
-
 ## Créditos
 
 Todas as imagens usadas na aplicação são pertencentes a freepik.com
@@ -326,13 +208,13 @@ export interface Restaurant {
 #### Passos
 
 * Criar a classe ErrorHandler (app/app.error-handler.ts)
-* Implementar o método estático handlerError fazendo o tratamento dos erros
+* Implementar o método estático handleError fazendo o tratamento dos erros
 <pre>
 import { Response } from '@angular/http'
 import { Observable } from 'rxjs/Observable'
 
 export class ErrorHandler {
-    static handlerError(error: Response | any) {
+    static handleError(error: Response | any) {
         let errorMessage: string
 
         if (error instanceof Response) {
@@ -353,12 +235,12 @@ export class ErrorHandler {
 * Importar o operador catch
   * `import 'rxjs/add/operator/catch';`
 
-* Acionar o operador catch chamando o método estático ErrorHandler.handlerError logo após o map
+* Acionar o operador catch chamando o método estático ErrorHandler.handleError logo após o map
   * <pre>
     restaurants(): Observable<Restaurant[]> {
         return this.http.get(`${MEAT_API}/restaurants`)
             .map(response => response.json())
-            .catch(ErrorHandler.handlerError)
+            .catch(ErrorHandler.handleError)
     }
     </pre>
 
@@ -404,7 +286,7 @@ export class ErrorHandler {
       restaurantById(id: string): Observable<Restaurant> {
         return this.http.get(`${MEAT_API}/restaurants/${id}`)
             .map(response => response.json())
-            .catch(ErrorHandler.handlerError)
+            .catch(ErrorHandler.handleError)
     }</pre>
   
 * Injetar RestaurantsService e ActivateRoute em RestaurantDetailComponent (propriedades privadas no construtor)
@@ -455,3 +337,41 @@ export class ErrorHandler {
 
 * Utilizar routerLinkActive para corrigir o efeito visual do link ativo
   * `routerLinkActive="detail-active"`
+
+
+### 10 - Implementando o Componente de Avaliações
+
+* Parent route
+* Pipes
+* Async
+* Date
+
+#### Passos
+
+* Criar o método `reviewsOfRestaurant` em `restaurants.service.ts`
+  * ```
+      reviewsOfRestaurant(id: string) : Observable<any[]> {
+        return this.http.get(`${MEAT_API}/restaurants/${id}/reviews`)
+            .map(response => response.json())
+            .catch(ErrorHandler.handleError) 
+    }
+    ```
+
+* No componente de Reviews (`reviews.component.ts`)
+  * Criar o array `reviews` de Observable<any>
+  * Adicionar no construtor o RestaurantService e ActivatedRoute
+    * ```
+    constructor(
+    private restaurantService: RestaurantService,
+    private route: ActivatedRoute
+  ) { }```
+  * Implementar no `ngOnInit` a chamada do método `reviewsOfRestaurant` do  `restaurantService`
+    * ```
+  ngOnInit() {
+    this.reviews = this.restaurantService
+      .reviewsOfRestaurant(this.route.parent.snapshot.params['id'])
+  }```
+
+* Alterar o template `reviews.component.html` com os dados de reviews
+  * Utilizar o pipe Async no ngFor (O pipe asyn substitui o subscribe do componente)
+    * ```*ngFor="let review of reviews | async"```
