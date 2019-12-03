@@ -344,7 +344,7 @@ export class ErrorHandler {
 * Parent route
 * Pipes
 * Async
-* Date
+* Pipe Date
 
 #### Passos
 
@@ -358,15 +358,15 @@ export class ErrorHandler {
     ```
 
 * No componente de Reviews (`reviews.component.ts`)
-  * Criar o array `reviews` de Observable<any>
+  * Criar o array `reviews` de Observable&lt;any&gt;
   * Adicionar no construtor o RestaurantService e ActivatedRoute
-    * ```
+  ```
     constructor(
     private restaurantService: RestaurantService,
     private route: ActivatedRoute
   ) { }```
   * Implementar no `ngOnInit` a chamada do método `reviewsOfRestaurant` do  `restaurantService`
-    * ```
+  ```
   ngOnInit() {
     this.reviews = this.restaurantService
       .reviewsOfRestaurant(this.route.parent.snapshot.params['id'])
@@ -375,3 +375,76 @@ export class ErrorHandler {
 * Alterar o template `reviews.component.html` com os dados de reviews
   * Utilizar o pipe Async no ngFor (O pipe asyn substitui o subscribe do componente)
     * ```*ngFor="let review of reviews | async"```
+
+
+#### 11 - Implementando os Itens de Menu
+
+* Pipe Date Currency
+* EventEmitter
+* Decorator @Output
+
+#### Passos
+
+* Alterar o template `menu-item.component.html` com a parte individual do item de menu presente no componente `menu.component.html`
+
+* Criar um novo tipo (interface) MenuItem `menu-item.model.ts`
+  * ```
+  export interface MenuItem {
+    id: string
+    name: string
+    description: string
+    price: number
+    imagePath: string
+}```
+
+* Criar no `MenuItemComponent` a propriedade `menuItem` do tipo `MenuItem`
+  * ```@Input() menuItem: MenuItem```
+
+* Alterar o template `menu-item.component.html` com as propriedades do `MenuItem`
+  * Utilizar pipe currency para a moeda
+  ```{{menuItem.price | currency: 'BRL' : true}}```
+
+* Criar no MenuItemComponent:
+  * a propriedade `add` e instanciar `EventEmitter`
+  ```@Output() add = new EventEmitter()```
+  * o método `emitAddEvent` invocando o método `emit` da propriedade `add` passando a propriedade `menuItem`
+  ```  emitAddEvent() {
+    this.add.emit(this.menuItem);
+  }
+  ```
+
+* Alterar no template do componente `MenuItemComponent` (menu-item.component.html) o link `Adicionar` adicionando e evento `click`. Chamar o método `emitAddEvent`
+  * ```(click)="emitAddEvent()"```
+
+* Alterar o serviço `RestaurantsService` (restaurants.service.ts) criando o método menuOfRestaurant
+  * ```    menuOfRestaurant(id: string) : Observable&lt;MenuItem[]&gt; {
+        return this.http.get(`${MEAT_API}/restaurants/${id}/menu`)
+            .map(response =&gt; response.json())
+            .catch(ErrorHandler.handleError) 
+    }
+    ```
+
+* Alterar no `MenuComponent` (menu.component.ts)
+  * No construtor adicionar as propriedades restaurantService e route
+  ```  constructor(
+    private restaurantService: RestaurantsService,
+    private route: ActivatedRoute
+  ) { }
+  ```  
+  * criar a propriedade menu do tipo Obsevable de array de MenuItem
+  ```menu: Observable&lt;MenuItem[]&gt;```
+  * Adicionar no método ngOnInit a chamada para o método `menuOfRestaurant` do serviço `restaurantService`
+  ```this.menu = this.restaurantService.menuOfRestaurant(this.route.parent.snapshot.params['id'])```
+  * Adicionar o método `addMenuItem` inicialmente apenas imprimindo o item
+  ```  addMenuItem(item: MenuItem) {
+    console.log(item)
+  }
+  ```
+
+* Alterar o template `menu.component.html` removendo todo o código estático pelo componente individual menu-item
+  * Utilizar pipe async na iteração de item
+  * no evento `add` chamar o método `addMenuItem`
+  ```    <mt-menu-item  
+      *ngFor="let item of menu | async" 
+      [menuItem]="item" 
+      (add)="addMenuItem($event)"></mt-menu-item>```
