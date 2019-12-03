@@ -14,8 +14,8 @@ export class ShoppingCartComponent implements OnInit {
   ngOnInit() {
   }
 
-  items(): CartItem[] {
-    return this.shoppingCartService.items
+  items(): CartItem[] {    
+    return this.shoppingCartService.items    
   }
 
   hasItems() {
@@ -24,5 +24,17 @@ export class ShoppingCartComponent implements OnInit {
 
   total(): number {
     return this.shoppingCartService.total()
+  }
+
+  clear() {
+    this.shoppingCartService.clear()
+  }
+
+  removeItem(item: any) {
+    this.shoppingCartService.removeItem(item)
+  }
+
+  addItem(item: any) {
+    this.shoppingCartService.addItem(item)
   }
 }

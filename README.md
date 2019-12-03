@@ -350,7 +350,7 @@ export class ErrorHandler {
 
 * Criar o método `reviewsOfRestaurant` em `restaurants.service.ts`
   * ```
-      reviewsOfRestaurant(id: string) : Observable<any[]> {
+    reviewsOfRestaurant(id: string) : Observable<any[]> {
         return this.http.get(`${MEAT_API}/restaurants/${id}/reviews`)
             .map(response => response.json())
             .catch(ErrorHandler.handleError) 
@@ -361,11 +361,12 @@ export class ErrorHandler {
   * Criar o array `reviews` de Observable&lt;any&gt;
   * Adicionar no construtor o RestaurantService e ActivatedRoute
   ```
-    constructor(
+  constructor(
     private restaurantService: RestaurantService,
     private route: ActivatedRoute
-  ) { }```
-  * Implementar no `ngOnInit` a chamada do método `reviewsOfRestaurant` do  `restaurantService`
+  ) { }
+  ```  
+  * Implementar no `ngOnInit` a chamada do método `reviewsOfRestaurant` do  `restaurantService`  
   ```
   ngOnInit() {
     this.reviews = this.restaurantService
@@ -387,8 +388,7 @@ export class ErrorHandler {
 
 * Alterar o template `menu-item.component.html` com a parte individual do item de menu presente no componente `menu.component.html`
 
-* Criar um novo tipo (interface) MenuItem `menu-item.model.ts`
-  * ``` 
+* Criar um novo tipo (interface) MenuItem `menu-item.model.ts` ```
 export interface MenuItem {
     id: string
     name: string
@@ -417,8 +417,7 @@ export interface MenuItem {
 * Alterar no template do componente `MenuItemComponent` (menu-item.component.html) o link `Adicionar` adicionando e evento `click`. Chamar o método `emitAddEvent`
   * ```(click)="emitAddEvent()"```
 
-* Alterar o serviço `RestaurantsService` (restaurants.service.ts) criando o método menuOfRestaurant
-  * ``` 
+* Alterar o serviço `RestaurantsService` (restaurants.service.ts) criando o método menuOfRestaurant ``` 
   menuOfRestaurant(id: string) : Observable&lt;MenuItem[]&gt; {
         return this.http.get(`${MEAT_API}/restaurants/${id}/menu`)
             .map(response =&gt; response.json())
@@ -459,8 +458,7 @@ export interface MenuItem {
 
 #### Passos
 
-* Criar uma classe `CartItem` (src/app/restaurant-detail/shopping-cart/cart-item.model.ts) para representar o item do carrinho
-  * ```
+* Criar uma classe `CartItem` (src/app/restaurant-detail/shopping-cart/cart-item.model.ts) para representar o item do carrinho ```
 export class CartItem {
 
     constructor(
@@ -476,8 +474,7 @@ export class CartItem {
 
 * Adicionar o `ShoppingCartService` na lista de providers do módulo raiz `app.module.ts`
 
-* Alterar o componente `ShoppingCartComponent` adicionando `shoppingCartService` no construtor e criando os métodos `items`, `hasItems` e `total` chamando o respectivo método/propriedade do serviço.
-  * ```
+* Alterar o componente `ShoppingCartComponent` adicionando `shoppingCartService` no construtor e criando os métodos `items`, `hasItems` e `total` chamando o respectivo método/propriedade do serviço. ```
   items(): CartItem[] {    
     return this.shoppingCartService.items    
   }
@@ -492,5 +489,17 @@ export class CartItem {
   ```
 
 * Alterar o template `shopping-cart.component.html` substituindo os valores fixos pelas respectivas propriedades.
-  * Utilizar pipe currecy nos valores monetários
-  * Utilizar ngIf para exibir a div que possui a mensagem "Seu carrinho está vazinho!" quando não há itens e inibir o restante das informações fazendo o contrário quando houver itens.
+  * Utilizar pipe currency nos valores monetários
+  * Utilizar `*ngIf` para exibir a div que possui a mensagem "Seu carrinho está vazinho!" quando não há itens e inibir o restante das informações fazendo o contrário quando houver itens.
+
+#### 12 - Aplicando Eventos no Componente do Carrinho de Compras
+
+* Template variable
+
+#### Passos
+
+* Alterar o componente `ShoppingCartComponent` adicionando os métodos `clear`, `removeItem` e `addItem`
+* Alterar o template `shopping-cart.component.html` adicionando os respectivos eventos para limpar, remover e adicionar os itens
+* Alterar o template `menu.component.html` alterando a chamada do evento add para `shoppingCart.addItem($event)`
+  * Criar a template variable `shoppingCart` na tag de template `mt-shopping-cart`
+  ```&lt;mt-shopping-cart #shoppingCart&gt;&lt;/mt-shopping-cart&gt;```
