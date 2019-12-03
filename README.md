@@ -388,8 +388,8 @@ export class ErrorHandler {
 * Alterar o template `menu-item.component.html` com a parte individual do item de menu presente no componente `menu.component.html`
 
 * Criar um novo tipo (interface) MenuItem `menu-item.model.ts`
-  * ```
-  export interface MenuItem {
+  * ``` 
+export interface MenuItem {
     id: string
     name: string
     description: string
@@ -408,7 +408,8 @@ export class ErrorHandler {
   * a propriedade `add` e instanciar `EventEmitter`
   ```@Output() add = new EventEmitter()```
   * o método `emitAddEvent` invocando o método `emit` da propriedade `add` passando a propriedade `menuItem`
-  ```  emitAddEvent() {
+  ``` 
+  emitAddEvent() {
     this.add.emit(this.menuItem);
   }
   ```
@@ -417,7 +418,8 @@ export class ErrorHandler {
   * ```(click)="emitAddEvent()"```
 
 * Alterar o serviço `RestaurantsService` (restaurants.service.ts) criando o método menuOfRestaurant
-  * ```    menuOfRestaurant(id: string) : Observable&lt;MenuItem[]&gt; {
+  * ``` 
+  menuOfRestaurant(id: string) : Observable&lt;MenuItem[]&gt; {
         return this.http.get(`${MEAT_API}/restaurants/${id}/menu`)
             .map(response =&gt; response.json())
             .catch(ErrorHandler.handleError) 
@@ -426,7 +428,8 @@ export class ErrorHandler {
 
 * Alterar no `MenuComponent` (menu.component.ts)
   * No construtor adicionar as propriedades restaurantService e route
-  ```  constructor(
+  ``` 
+  constructor(
     private restaurantService: RestaurantsService,
     private route: ActivatedRoute
   ) { }
@@ -436,7 +439,8 @@ export class ErrorHandler {
   * Adicionar no método ngOnInit a chamada para o método `menuOfRestaurant` do serviço `restaurantService`
   ```this.menu = this.restaurantService.menuOfRestaurant(this.route.parent.snapshot.params['id'])```
   * Adicionar o método `addMenuItem` inicialmente apenas imprimindo o item
-  ```  addMenuItem(item: MenuItem) {
+  ``` 
+  addMenuItem(item: MenuItem) {
     console.log(item)
   }
   ```
@@ -444,7 +448,49 @@ export class ErrorHandler {
 * Alterar o template `menu.component.html` removendo todo o código estático pelo componente individual menu-item
   * Utilizar pipe async na iteração de item
   * no evento `add` chamar o método `addMenuItem`
-  ```    <mt-menu-item  
+  ``` 
+  <mt-menu-item  
       *ngFor="let item of menu | async" 
       [menuItem]="item" 
-      (add)="addMenuItem($event)"></mt-menu-item>```
+      (add)="addMenuItem($event)"></mt-menu-item>
+  ```
+
+#### 11 - Implementando o Carrinho de Compras
+
+#### Passos
+
+* Criar uma classe `CartItem` (src/app/restaurant-detail/shopping-cart/cart-item.model.ts) para representar o item do carrinho
+  * ```
+export class CartItem {
+
+    constructor(
+        public menuItem: MenuItem,
+        public quantity: number = 1) { }
+
+    value() :number {
+        return this.menuItem.price * this.quantity
+    }
+}```
+
+* Criar um novo serviço `ShoppingCartService` (src/app/restaurant-detail/shopping-cart/shopping-cart.service.ts). Adicionar uma propriedade items como um array de `CartItem` e implementar métodos para limpar (clear) adicionar item (addItem), remover item (removeItem) e totalizar os itens (total).
+
+* Adicionar o `ShoppingCartService` na lista de providers do módulo raiz `app.module.ts`
+
+* Alterar o componente `ShoppingCartComponent` adicionando `shoppingCartService` no construtor e criando os métodos `items`, `hasItems` e `total` chamando o respectivo método/propriedade do serviço.
+  * ```
+  items(): CartItem[] {    
+    return this.shoppingCartService.items    
+  }
+
+  hasItems() {
+    return this.shoppingCartService.items.length > 0
+  }
+
+  total(): number {
+    return this.shoppingCartService.total()
+  }
+  ```
+
+* Alterar o template `shopping-cart.component.html` substituindo os valores fixos pelas respectivas propriedades.
+  * Utilizar pipe currecy nos valores monetários
+  * Utilizar ngIf para exibir a div que possui a mensagem "Seu carrinho está vazinho!" quando não há itens e inibir o restante das informações fazendo o contrário quando houver itens.
